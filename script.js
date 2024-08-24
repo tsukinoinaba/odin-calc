@@ -4,7 +4,9 @@ let op = "";
 const display = document.querySelector("#display");
 const numBtns = document.querySelectorAll(".numBtn");
 const opBtns = document.querySelectorAll(".opBtn");
-const operators = ["+", "-", "*", "/"];
+const eqBtn = document.querySelector("#eqBtn");
+const clrBtn = document.querySelector("#clrBtn");
+
 
 function add (a, b) {
     return a + b;
@@ -22,7 +24,11 @@ function divide (a, b) {
     if (b === 0) {
         return "Do you play Shippu Mahou Daisakusen too?";
     }
-    return Math.round(a / b * 10**10) / 10**10;
+    return a / b;
+}
+
+function round (n) {
+    return Math.round(n * 10**10) / 10**10;
 }
 
 function operate (a, op, b) {
@@ -40,48 +46,63 @@ function operate (a, op, b) {
     }
 }
 
-function updateDisplay() {
+function updateDisplayOperator () {
     const c = this.textContent;
     
-    if (operators.includes(c)) {
-        if (op) {
-            a = "" + operate(a, op, b);
-            display.textContent = a;
-        }
+    if (op) {
+        a = "" + round(operate(a, op, b));
+        display.textContent = a;
+    }
         
-        else {
+    else {
+        if (display.textContent) {
             a = display.textContent;
         }
-
-        op = c;
-        b = "";
-        display.textContent += c;
-    }
-
-    else if (c === "=") {
-        if (b !== "") {
-            display.textContent = "" + operate(a, op, b);
+        else {
+            a = "0";
         }
     }
 
-    else {
-        if (display.textContent === "0") {
-            display.textContent = "";
-        }
+    op = c;
+    b = "";
+    display.textContent += c;
+}
 
-        display.textContent += c;
-        if (a !== "") {
-            b += c;
-        }
+function updateDisplayEqual () {
+    if (b !== "") {
+        display.textContent = "" + round(operate(a, op, b));
     }
 }
 
+function updateDisplayDigit () {
+    const c = this.textContent;
+
+    if (display.textContent === "0") {
+        display.textContent = "";
+    }
+
+    display.textContent += c;
+    if (a !== "") {
+        b += c;
+    }
+}
+
+function updateDisplayClear () {
+    a = "";
+    b = "";
+    op = "";
+    display.textContent = "";
+}
+
+
+
 for (let btn of numBtns) {
-    btn.addEventListener("click", updateDisplay);
+    btn.addEventListener("click", updateDisplayDigit);
 }
 
 for (let btn of opBtns) {
-    btn.addEventListener("click", updateDisplay);
+    btn.addEventListener("click", updateDisplayOperator);
 }
 
-display.textContent = "0";
+eqBtn.addEventListener("click", updateDisplayEqual);
+clrBtn.addEventListener("click", updateDisplayClear);
