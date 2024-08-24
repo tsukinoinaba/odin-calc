@@ -22,7 +22,7 @@ function divide (a, b) {
     if (b === 0) {
         return "Do you play Shippu Mahou Daisakusen too?";
     }
-    return a / b;
+    return Math.round(a / b * 10**10) / 10**10;
 }
 
 function operate (a, op, b) {
