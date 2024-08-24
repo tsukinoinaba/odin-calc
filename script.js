@@ -1,5 +1,5 @@
-let a = 0;
-let b = 0;
+let a = "";
+let b = "";
 let op = "";
 const display = document.querySelector("#display");
 const numBtns = document.querySelectorAll(".numBtn");
@@ -26,6 +26,8 @@ function divide (a, b) {
 }
 
 function operate (a, op, b) {
+    a = +a;
+    b = +b;
     switch (op) {
         case "+":
             return add(a, b);
@@ -40,13 +42,38 @@ function operate (a, op, b) {
 
 function updateDisplay() {
     const c = this.textContent;
+    
+    if (operators.includes(c)) {
+        if (op) {
+            a = "" + operate(a, op, b);
+            display.textContent = a;
+        }
+        
+        else {
+            a = display.textContent;
+        }
 
-    if (display.textContent === "0" && !operators.includes(c)) {
-        display.textContent = c;
-        return;
+        op = c;
+        b = "";
+        display.textContent += c;
     }
 
-    display.textContent += c;
+    else if (c === "=") {
+        if (b !== "") {
+            display.textContent = "" + operate(a, op, b);
+        }
+    }
+
+    else {
+        if (display.textContent === "0") {
+            display.textContent = "";
+        }
+
+        display.textContent += c;
+        if (a !== "") {
+            b += c;
+        }
+    }
 }
 
 for (let btn of numBtns) {
