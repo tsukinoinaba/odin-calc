@@ -1,6 +1,7 @@
 let a = "";
 let b = "";
 let op = "";
+let override = false;
 const display = document.querySelector("#display");
 const numBtns = document.querySelectorAll(".numBtn");
 const opBtns = document.querySelectorAll(".opBtn");
@@ -22,7 +23,8 @@ function multiply (a, b) {
 
 function divide (a, b) {
     if (b === 0) {
-        return "Do you play Shippu Mahou Daisakusen too?";
+        override = true;
+        display.textContent = "Do you play Shippu Mahou Daisakusen too?";
     }
     return a / b;
 }
@@ -34,6 +36,7 @@ function round (n) {
 function operate (a, op, b) {
     a = +a;
     b = +b;
+
     switch (op) {
         case "+":
             return add(a, b);
@@ -50,7 +53,13 @@ function updateDisplayOperator () {
     const c = this.textContent;
     
     if (op) {
-        a = "" + round(operate(a, op, b));
+        if (b !== "") {
+            a = "" + round(operate(a, op, b));
+            if (override) {
+                return;
+            }
+        }
+        
         display.textContent = a;
     }
         
@@ -70,15 +79,21 @@ function updateDisplayOperator () {
 
 function updateDisplayEqual () {
     if (b !== "") {
-        display.textContent = "" + round(operate(a, op, b));
+        a = "" + round(operate(a, op, b));
+        if (override) {
+            return;
+        }
+        
+        display.textContent = a;
+        override = true;
     }
 }
 
 function updateDisplayDigit () {
     const c = this.textContent;
 
-    if (display.textContent === "0") {
-        display.textContent = "";
+    if (override) {
+        updateDisplayClear();
     }
 
     display.textContent += c;
@@ -92,6 +107,7 @@ function updateDisplayClear () {
     b = "";
     op = "";
     display.textContent = "";
+    override = false;
 }
 
 
