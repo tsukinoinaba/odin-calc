@@ -54,8 +54,10 @@ function operate (a, op, b) {
 
 
 
-function updateDisplayOperator () {
-    const c = this.textContent;
+function updateDisplayOperator (c) {
+    if (typeof c === "object") {
+        c = this.textContent;
+    }
     
     if (op) {
         if (b !== "") {
@@ -101,8 +103,10 @@ function updateDisplayEqual () {
     }
 }
 
-function updateDisplayDigit () {
-    const c = this.textContent;
+function updateDisplayDigit (c) {
+    if (typeof c === "object") {
+        c = this.textContent;
+    }
 
     if (override) {
         updateDisplayClear();
@@ -152,3 +156,30 @@ for (let btn of opBtns) {
 decBtn.addEventListener("click", updateDisplayDecimal);
 eqBtn.addEventListener("click", updateDisplayEqual);
 clrBtn.addEventListener("click", updateDisplayClear);
+
+document.addEventListener("keydown", function(event) {
+    if (event.keyCode >= 48 && event.keyCode <= 57 && !event.shiftKey) {
+        updateDisplayDigit(event.keyCode - 48);
+    }
+    else if (event.keyCode === 190 && !event.shiftKey) {
+        updateDisplayDecimal();
+    }
+    else if (event.keyCode === 61 && !event.shiftKey || event.keyCode === 13) {
+        updateDisplayEqual();
+    }
+    else if (event.keyCode === 61 && event.shiftKey) {
+        updateDisplayOperator("+");
+    }
+    else if (event.keyCode === 173 && !event.shiftKey) {
+        updateDisplayOperator("-");
+    }
+    else if (event.keyCode === 56 && event.shiftKey) {
+        updateDisplayOperator("*");
+    }
+    else if (event.keyCode === 191 && !event.shiftKey) {
+        updateDisplayOperator("/");
+    }
+    else if (event.keyCode === 46) {
+        updateDisplayClear();
+    }
+})
