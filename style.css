@@ -1,0 +1,51 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.numBtn,
+.opBtn,
+#clrBtn,
+#bckBtn,
+#decBtn {
+    width: 64px;
+}
+
+#zeroBtn,
+#eqBtn {
+    width: 132px;
+}
+
+.row {
+    display: flex;
+    gap: 4px;
+}
+
+button {
+    font-size: 32pt;
+    margin: 2px 0;
+}
+
+#display {
+    height: 64px;
+    width: 336px;
+    font-size: 32pt;
+    background-color: lightgray;
+    overflow: auto;
+}
+
+.numBtn,
+#decBtn {
+    background-color: turquoise;
+}
+
+.opBtn,
+#eqBtn {
+    background-color: orange;
+}
+
+#clrBtn,
+#bckBtn {
+    background-color: crimson;
+}
