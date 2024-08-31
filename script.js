@@ -2,9 +2,12 @@ let a = "";
 let b = "";
 let op = "";
 let override = false;
+let decimal = false;
+
 const display = document.querySelector("#display");
 const numBtns = document.querySelectorAll(".numBtn");
 const opBtns = document.querySelectorAll(".opBtn");
+const decBtn = document.querySelector("#decBtn");
 const eqBtn = document.querySelector("#eqBtn");
 const clrBtn = document.querySelector("#clrBtn");
 
@@ -49,12 +52,16 @@ function operate (a, op, b) {
     }
 }
 
+
+
 function updateDisplayOperator () {
     const c = this.textContent;
     
     if (op) {
         if (b !== "") {
             a = "" + round(operate(a, op, b));
+
+            // Prevent further computation if divided by zero error occurs
             if (override) {
                 return;
             }
@@ -75,6 +82,8 @@ function updateDisplayOperator () {
     op = c;
     b = "";
     display.textContent += c;
+    override = false;
+    decimal = false;
 }
 
 function updateDisplayEqual () {
@@ -85,7 +94,10 @@ function updateDisplayEqual () {
         }
         
         display.textContent = a;
+        op = "";
+        b = "";
         override = true;
+        decimal = false;
     }
 }
 
@@ -102,12 +114,29 @@ function updateDisplayDigit () {
     }
 }
 
+function updateDisplayDecimal () {
+    if (decimal) {
+        return;
+    }
+
+    if (override) {
+        updateDisplayClear();
+    }
+
+    display.textContent += ".";
+    if (a !== "") {
+        b += "."
+    }
+    decimal = true;
+}
+
 function updateDisplayClear () {
     a = "";
     b = "";
     op = "";
     display.textContent = "";
     override = false;
+    decimal = false;
 }
 
 
@@ -120,5 +149,6 @@ for (let btn of opBtns) {
     btn.addEventListener("click", updateDisplayOperator);
 }
 
+decBtn.addEventListener("click", updateDisplayDecimal);
 eqBtn.addEventListener("click", updateDisplayEqual);
 clrBtn.addEventListener("click", updateDisplayClear);
