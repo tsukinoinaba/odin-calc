@@ -143,6 +143,37 @@ function updateDisplayClear () {
     decimal = false;
 }
 
+function updateDisplayBackspace () {
+    if (display.textContent === "") {
+        return;
+    }
+
+    const expression = display.textContent;
+    const lastChar = expression.at(-1);
+    display.textContent = expression.slice(0, -1);
+
+    if (lastChar === op) {
+        a = "";
+        b = "";
+        op = "";
+        override = false;
+        decimal = expression.split("").includes(".");
+    }
+    else if (a !== "") {
+        if (lastChar === ".") {
+            decimal = false;
+        }
+    }
+    else {
+        if (lastChar === ".") {
+            decimal = false;
+        }
+        else {
+            b = b.slice(0, -1);
+        }
+    }
+}
+
 
 
 for (let btn of numBtns) {
@@ -156,6 +187,7 @@ for (let btn of opBtns) {
 decBtn.addEventListener("click", updateDisplayDecimal);
 eqBtn.addEventListener("click", updateDisplayEqual);
 clrBtn.addEventListener("click", updateDisplayClear);
+bckBtn.addEventListener("click", updateDisplayBackspace);
 
 document.addEventListener("keydown", function(event) {
     if (event.keyCode >= 48 && event.keyCode <= 57 && !event.shiftKey) {
@@ -178,6 +210,9 @@ document.addEventListener("keydown", function(event) {
     }
     else if (event.keyCode === 191 && !event.shiftKey) {
         updateDisplayOperator("/");
+    }
+    else if (event.keyCode === 8) {
+        updateDisplayBackspace();
     }
     else if (event.keyCode === 46) {
         updateDisplayClear();
